@@ -20,7 +20,8 @@ def swag_parameters(module, params, no_cov_mat=True):
         if module._parameters[name] is None:
             continue
         data = module._parameters[name].data
-        module._parameters.pop(name)
+        # HACK: This line causes problem, but I do not understand why yet.
+        # module._parameters.pop(name)
         module.register_buffer("%s_mean" % name, data.new(data.size()).zero_())
         module.register_buffer("%s_sq_mean" % name, data.new(data.size()).zero_())
 

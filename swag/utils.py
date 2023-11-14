@@ -218,8 +218,10 @@ def bn_update(loader, model, verbose=False, subset=None, **kwargs):
         if verbose:
 
             loader = tqdm.tqdm(loader, total=num_batches)
-        for input, _ in loader:
-            input = input.cuda(non_blocking=True)
+        for batch in loader:
+            # TODO: Should want .to(model.device) but
+            # 'SWAG' object has no attribute 'device'
+            input = batch["X"]
             input_var = torch.autograd.Variable(input)
             b = input_var.data.size(0)
 
