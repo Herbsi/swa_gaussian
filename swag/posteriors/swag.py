@@ -143,10 +143,14 @@ class SWAG(torch.nn.Module):
         # unflatten new sample like the mean sample
         samples_list = unflatten_like(sample, mean_list)
 
-        # TODO: Depending on how expensive this call is, it should maybe be cached
         if torch.cuda.is_available():
             for (module, name), sample in zip(self.params, samples_list):
+                # TODO: Potentially this code snippet does not work on cuda
                 module.__setattr__(name, sample.cuda())
+
+        else:
+            for (module, name), sample in zip(self.params, samples_list):
+                module.__setattr__(name, torch.nn.Parameter(sample))
 
     def collect_model(self, base_model):
         for (module, name), base_param in zip(self.params, base_model.parameters()):
