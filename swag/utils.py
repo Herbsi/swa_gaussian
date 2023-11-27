@@ -221,7 +221,10 @@ def bn_update(loader, model, verbose=False, subset=None, **kwargs):
         for batch in loader:
             # TODO: Should want .to(model.device) but
             # 'SWAG' object has no attribute 'device'
-            input = batch["X"]
+            if torch.cuda.is_available():
+                input = batch["X"].to('cuda')
+            else:
+                input = batch["X"]
             input_var = torch.autograd.Variable(input)
             b = input_var.data.size(0)
 

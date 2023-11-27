@@ -146,7 +146,8 @@ class SWAG(torch.nn.Module):
         if torch.cuda.is_available():
             for (module, name), sample in zip(self.params, samples_list):
                 # TODO: Potentially this code snippet does not work on cuda
-                module.__setattr__(name, sample.cuda())
+                module.__setattr__(name, torch.nn.Parameter(sample))
+                module.cuda()
 
         else:
             for (module, name), sample in zip(self.params, samples_list):
